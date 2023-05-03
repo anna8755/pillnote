@@ -7,11 +7,15 @@ const mongoose = require('mongoose');
 const router = require('./router');
 const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./middlewares/error-middleware');
+const socketAuthMiddleware = require("./middlewares/socket-auth-middleware");
+const SocketController = require("./controller/socket-controller");
 
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ });
+
+global.sockets = [];
 
 const PORT = process.env.PORT || 5000;
 
@@ -24,24 +28,9 @@ app.use('/api', router)
 app.use(errorMiddleware);
 //#endregion
 
-// io.use((socket, next) => {
-//     //каким образом в console.log вывести информацию, которую передали на сервер?
-//     console.log(socket.request._query.token);
-//     next()
-// })
+io.use(socketAuthMiddleware);
 
-
-// io.on("connection", (socket) => {
-
-//     console.log('user is connected')
-
-//     socket.emit('hi', 'hello')
-
-//     socket.on('hi', () => {
-//         console.log('hi from client!')
-//     })
-// });
-
+io.on("connection", SocketController.socketController)
 
 const start = async () => {
     try {

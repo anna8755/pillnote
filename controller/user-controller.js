@@ -15,19 +15,15 @@ const { validationResult } = require("express-validator");
 
 
 class UserController {
-
-
     async registration(req, res, next) {
         try {
             const errors = validationResult(req);
-            
-            // console.log("Registration route");
 
             if (!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Ошибка при валидации', errors.array()));
             }
-            const { fullname, email, password } = req.body;
-            const userData = await userService.registration(fullname, email, password);
+            const { fullname, email, password, photoLink } = req.body;
+            const userData = await userService.registration(fullname, email, password, photoLink);
 
             res.cookie('refreshToken', userData.refreshToken,
                 { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
@@ -36,6 +32,9 @@ class UserController {
         } catch (e) {
             next(e);
         }
+    }
+    async forgotPassword(req, res, next) {
+        
     }
 
     async login(req, res, next) {
@@ -106,7 +105,6 @@ class UserController {
 
     async getUser(req, res, next) {
         try {
-            // console.log("\n\n\nGet User Route\n\n\n")
             const userData = await userService.getUser(req.headers.authorization);
             return res.json(userData);
         } catch (e) {

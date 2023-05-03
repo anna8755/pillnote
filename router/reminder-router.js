@@ -1,5 +1,4 @@
 const Router = require('express').Router;
-// const { body } = require('express-validator');
 const authMiddleware = require('../middlewares/auth-middleware');
 const reminderController = require('../controller/reminder-controller');
 const validationMiddleware = require('../middlewares/validation-middleware');
@@ -10,8 +9,14 @@ reminderRouter
     .post('/', validationMiddleware.validateTime(),
         authMiddleware,
         reminderController.addReminder)
+    .post('/view/:id', authMiddleware,
+        reminderController.viewReminder)
+    .get('/viewed', authMiddleware,
+        reminderController.getViewedReminders)
     .get('/', authMiddleware,
         reminderController.getAllReminders)
+    .get('/available', authMiddleware,
+        reminderController.getAvailableReminders)
     .get('/:id', authMiddleware,
         reminderController.getReminder)
     .patch('/:id', authMiddleware,

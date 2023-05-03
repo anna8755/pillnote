@@ -5,11 +5,14 @@ const authMiddleware = require('../middlewares/auth-middleware');
 
 const userRouter = new Router();
 
-userRouter.post('/registration',
-    body('email').isEmail(),
-    body('password')
-        .isLength({ min: 7, max: 16 }),
-    userController.registration)
+userRouter
+    .post('/registration',
+        body('email').isEmail(),
+        body('password')
+            .isLength({ min: 7, max: 16 }),
+        userController.registration)
+    // .post('/forgotpass', body('email').isEmail(),
+    //     userController.forgotPassword)
     .post('/login', userController.login)
     .post('/logout', userController.logout)
     .get('/activate/:link', userController.activate)

@@ -8,7 +8,7 @@ const ApiError = require("../exceptions/api-error");
 
 
 class UserService {
-    async registration(fullname, email, password) {
+    async registration(fullname, email, password, photoLink) {
         const candidate = await UserModel.findOne({ email })
         if (candidate) {
             throw ApiError.BadRequest(`Пользователь с таким ${email} уже существует!`)
@@ -20,7 +20,7 @@ class UserService {
 
         let activationLink = `${process.env.API_URL}/api/user/activate/${activationLinkDb}`;
 
-        const user = await UserModel.create({ fullname, email, password: hashPassword, activationLink: activationLinkDb });
+        const user = await UserModel.create({ fullname, email, password: hashPassword, activationLink: activationLinkDb, photoLink });
         await mailService.sendActivationMail(email, activationLink);
 
         const userDto = new UserDto(user);

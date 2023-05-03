@@ -3,6 +3,13 @@ const tokenModel = require("../model/token-model");
 
 
 class TokenService {
+    getAccesToken(token){
+        if (!token) throw new (ApiError.BadRequest());
+        const accessToken = token.split(' ')[1];
+        if (!accessToken) throw new (ApiError.BadRequest());
+        return accessToken;
+    }
+
     generateTokens(payload) {
         const accessToken = jwt
             .sign(payload,
@@ -32,6 +39,10 @@ class TokenService {
     validateAccessToken(token){
         try {
             const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+
+            // console.log('valid!')
+            // console.log(token)
+
             return userData;
         } catch (e) {
             return null;
