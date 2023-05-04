@@ -9,6 +9,8 @@ const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./middlewares/error-middleware');
 const socketAuthMiddleware = require("./middlewares/socket-auth-middleware");
 const SocketController = require("./controller/socket-controller");
+const ejs = require('ejs');
+const bodyParser = require('body-parser');
 
 
 const app = express();
@@ -20,7 +22,9 @@ global.sockets = [];
 const PORT = process.env.PORT || 5000;
 
 //#region объявления use
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
