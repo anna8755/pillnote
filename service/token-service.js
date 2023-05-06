@@ -3,7 +3,7 @@ const tokenModel = require("../model/token-model");
 
 
 class TokenService {
-    getAccesToken(token){
+    getAccesToken(token) {
         if (!token) throw new (ApiError.BadRequest());
         const accessToken = token.split(' ')[1];
         if (!accessToken) throw new (ApiError.BadRequest());
@@ -27,16 +27,16 @@ class TokenService {
     }
 
     async saveToken(userId, refreshToken) {
-        const tokenData = await tokenModel.findOne({user: userId})
+        const tokenData = await tokenModel.findOne({ user: userId })
         if (tokenData) {
             tokenData.refreshToken = refreshToken;
             return tokenData.save();
         }
-        const token = await tokenModel.create({user: userId, refreshToken})
+        const token = await tokenModel.create({ user: userId, refreshToken })
         return token;
     }
 
-    validateAccessToken(token){
+    validateAccessToken(token) {
         try {
             const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
@@ -49,21 +49,27 @@ class TokenService {
         }
     }
 
-    validateRefreshToken(token){
+    validateRefreshToken(token) {
         try {
             const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
             return userData;
         } catch (e) {
-            return null;            
+            return null;
         }
     }
 
-    async removeToken(refreshToken){
-        const tokenData = await tokenModel.deleteOne({refreshToken});
+    async removeToken(refreshToken) {
+        const tokenData = await tokenModel.deleteOne({ refreshToken });
         return tokenData;
     }
-    async findToken(refreshToken){
-        const tokenData = await tokenModel.findOne({refreshToken});
+
+    async removeTokenByUserId(userId) {
+        const removeResult = await tokenModel.findOneAndDelete({ user: userId })
+        return removeResult;
+    }
+
+    async findToken(refreshToken) {
+        const tokenData = await tokenModel.findOne({ refreshToken });
         return tokenData;
     }
 

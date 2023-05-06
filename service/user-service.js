@@ -5,7 +5,7 @@ const mailService = require("./mail-service");
 const tokenService = require("./token-service");
 const UserDto = require("../dto/user-dto");
 const ApiError = require("../exceptions/api-error");
-
+const ForgotPassLinkModel = require('../model/forgot-pass');
 
 class UserService {
     async registration(fullname, email, password, photoLink) {
@@ -62,6 +62,24 @@ class UserService {
             ...tokens,
             user: userDto
         };
+    }
+    async forgotPassword(email) {
+        const user = await UserModel.findOne({ email: email });
+        if (!user) {
+            throw ApiError.BadRequest('Пользователя с такой почтой не существует!');
+        }
+
+        const link = uuid.v4();
+
+        let forgotlink = await ForgotPassLinkModel.findOne({ user: user._id });
+        if (!forgotlink) forgotlink = await ForgotPassLinkModel.create({ user: user._id, link })
+        else forgotlink = await ForgotPassLinkModel.findOneAndUpdate({ user: user._id }, { link })
+
+        const forgotLink = `${process.env.API_URL}/forgot/${link}`;
+        await mailService.sendForgotPasswordMail(email, forgotLink, user.fullname);
+        await tokenService.removeTokenByUserId(user._id);
+
+        return('На вашу почту было отправлено письмо из дальнейшими инструкциями!')
     }
     async logout(refreshToken) {
         const token = await tokenService.removeToken(refreshToken);

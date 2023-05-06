@@ -2,18 +2,6 @@ const ApiError = require("../exceptions/api-error");
 const userService = require("../service/user-service");
 const { validationResult } = require("express-validator");
 
-//#region служебные функции
-// const getRefreshToken = (req) => {
-//     const refreshToken = (req.headers.apptype == "Postman") 
-//     ?  req.cookies.refreshToken 
-//     : req.body.refreshToken;
-
-//     return refreshToken;
-// }
-//#endregion
-
-
-
 class UserController {
     async registration(req, res, next) {
         try {
@@ -34,7 +22,15 @@ class UserController {
         }
     }
     async forgotPassword(req, res, next) {
-        
+        try {
+            const email = req.params.email;
+            const result = await userService.forgotPassword(email);
+
+            // return res.json(result);
+            return res.json(result);
+        } catch (e) {
+            next(e);
+        }
     }
 
     async login(req, res, next) {

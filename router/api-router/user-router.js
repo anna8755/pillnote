@@ -1,7 +1,7 @@
-const userController = require("../controller/user-controller");
+const userController = require("../../controller/user-controller");
 const Router = require('express').Router;
 const { body } = require('express-validator');
-const authMiddleware = require('../middlewares/auth-middleware');
+const authMiddleware = require('../../middlewares/auth-middleware');
 
 const userRouter = new Router();
 
@@ -13,6 +13,7 @@ userRouter
         userController.registration)
     // .post('/forgotpass', body('email').isEmail(),
     //     userController.forgotPassword)
+    .post('/forgot/:email', userController.forgotPassword)
     .post('/login', userController.login)
     .post('/logout', userController.logout)
     .get('/activate/:link', userController.activate)

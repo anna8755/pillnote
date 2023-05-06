@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Восстановление пароля</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0px 0px 10px #aaaaaa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center my-5">Восстановление пароля, <%= link %>
+        </h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6 form-container">
+                <form action="/reset" method="POST">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm-password" class="form-label">Подтвердите пароль</label>
+                        <input type="password" class="form-control" id="confirm-password" name="confirm-password"
+                            required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="show-password"
+                            onclick="togglePasswordVisibility()">
+                        <label class="form-check-label" for="show-password">Показать пароль</label>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Подтвердить</button>
+                    </div>
+                </form>
+                <div id="password-match-error" class="alert alert-danger d-none my-3" role="alert">
+                    Пароли не совпадают!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Создаем глобальную переменную forgotLink и присваиваем ей значение link
+        var forgotLink = '<%= link %>';
+    </script>
+    <script src="../js/forgot-pass.js"></script>
+</body>
+
+</html>

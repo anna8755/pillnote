@@ -1,7 +1,7 @@
 const Router = require('express').Router;
-const authMiddleware = require('../middlewares/auth-middleware');
-const reminderController = require('../controller/reminder-controller');
-const validationMiddleware = require('../middlewares/validation-middleware');
+const authMiddleware = require('../../middlewares/auth-middleware');
+const reminderController = require('../../controller/reminder-controller');
+const validationMiddleware = require('../../middlewares/validation-middleware');
 
 const reminderRouter = new Router();
 
