@@ -15,8 +15,10 @@ module.exports = (token) => {
     
     const userData = tokenService.validateAccessToken(accessToken);
     
+    console.log(userData)
+
     if (!userData) {
-        console.log(accessToken);
+        // console.log(accessToken);
         // console.log("3")
         throw new (ApiError.UnathorizatedError());
     }

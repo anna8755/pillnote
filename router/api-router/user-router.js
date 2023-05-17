@@ -15,7 +15,7 @@ userRouter
     //     userController.forgotPassword)
     .post('/forgot/:email', userController.forgotPassword)
     .post('/login', userController.login)
-    .post('/logout', userController.logout)
+    .post('/logout', authMiddleware, userController.logout)
     .get('/activate/:link', userController.activate)
     .get('/refresh', userController.refresh)
     .get('/users', authMiddleware, userController.getUsers)
